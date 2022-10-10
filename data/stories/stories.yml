@@ -194,7 +194,6 @@ stories:
   - action: action_search_platforms
   - action: utter_other_info
   - intent: affirm
-  - action: utter_games
 
 - story: deactivate slot after correct game search 2
   steps: 
@@ -207,7 +206,6 @@ stories:
   - action: action_search_screenshots
   - action: utter_other_info
   - intent: affirm
-  - action: utter_games
 
 
 
@@ -222,7 +220,7 @@ stories:
   - action: action_search_store
   - action: utter_other_info
   - intent: affirm
-  - action: utter_games
+
 
 
 
@@ -237,7 +235,7 @@ stories:
   - action: action_get_trailer
   - action: utter_other_info
   - intent: affirm
-  - action: utter_games
+
 
 - story: deactivate slot after correct game search 5
   steps: 
@@ -250,7 +248,7 @@ stories:
   - action: action_metacritics
   - action: utter_other_info
   - intent: affirm
-  - action: utter_games
+
 
 - story: search again 
   steps:

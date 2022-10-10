@@ -103,6 +103,7 @@ responses:
      I can show info about: 
      GAMES:
       - General information about videogame. 
+      - Score and tag of the game.
       - Screenshot of the game. 
       - Platforms where the game is avaiable. 
       - Stores where the game is sold.

@@ -313,6 +313,8 @@ class ActionSearchScreenshots(Action):
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         name = tracker.get_slot('game')
         indice = tracker.get_slot('index')
+        if indice > 0:
+            indice=indice -1
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
         print(name)
@@ -357,6 +359,8 @@ class ActionSearchStoreLink(Action):
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         name = tracker.get_slot('game')
         indice = tracker.get_slot('index')
+        if indice > 0:
+            indice=indice -1
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
         print(name)
@@ -398,6 +402,8 @@ class ActionGetTrailer(Action):
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         name = tracker.get_slot('game')
         indice = tracker.get_slot('index')
+        if indice > 0:
+            indice=indice -1
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
         print(name)
@@ -442,97 +448,52 @@ class ActionMetacritic(Action):
     
     def name(self) -> Text:
         return "action_metacritics"
-
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         name = tracker.get_slot('game')
         indice = tracker.get_slot('index')
-        numero = tracker.get_slot('number')
+        if indice > 0:
+            indice=indice -1
+        game_id=tracker.get_slot('game_id')
+        numero=tracker.get_slot('number')
         print(name)
-        print(indice)
-        if numero=="None":
+        print(numero)
+        print(game_id)
+        if name is not 'None' and numero=="None" and game_id==0:
             r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
-            
-
-            if r.status_code == 200:
-                if indice > 0:
+            if r.status_code ==200:
+                data = r.json()
+                game_id=data['results'][indice]['id']
+            else: output = "I couldnt find any info of the game"
+        elif numero!='None' and game_id==0:
+                print("dentro elif")
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                if r.status_code ==200:
                     data = r.json()
-                    nome = data['results'][indice - 1]['name'] #nome videogame
-                    if 'None' in nome:
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    metacritic= data['results']['metacritc']
-                    if metacritic == 'None':
-                        metacritic="(Score not avaiable)"
-                    ratings = []
-                    ratings_data = data['results'][indice - 1]['esrb_rating']
-                    if ratings_data == 'None':
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    else:
-                        for elem in ratings_data:
-                            ratings.append(elem['name'])
-                        string_ratings =' '.join(str(elem) for elem in ratings)
-                        print(string_ratings) 
-                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
-                else:
-                    data = r.json()
-                    nome = data['results'][indice]['name'] #nome videogame
-                    if 'None' in nome:
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    metacritic= data['results']['metacritc']
-                    if metacritic == 'None':
-                        metacritic="(Score not avaiable)"
-                    ratings = []
-                    ratings_data = data['results'][indice]['esrb_rating']
-                    if ratings_data == 'None':
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    else:
-                        for elem in ratings_data:
-                            ratings.append(elem['name'])
-                        string_ratings =' '.join(str(elem) for elem in ratings)
-                        print(string_ratings) 
-                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
+                    game_id=data['results'][indice]['id']
+                else: output = "I couldnt find any info of the game"
+        r = requests.get(url="https://api.rawg.io/api/games/{}?key=bbac0252b5ed4a2b8286472063cb2dfe".format(game_id))
+        data = r.json()
+        nome=data['name']
+        metacritic= data['metacritic']
+        if metacritic == 'None':
+            metacritic="(Score not avaiable)"
+        ratings = []
+        ratings_data = data['esrb_rating']['name']
+        print(ratings_data)
+        '''
+        if ratings_data == 'None':
+            output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+        else:
+            if len(ratings_data)==1:
+                ratings.append(ratings_data['name'])
             else:
-                output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-        else:   
-            r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
-            
-            if r.status_code == 200:
-                if indice > 0:
-                    data = r.json()
-                    nome = data['results'][indice - 1]['name'] #nome videogame
-                    if 'None' in nome:
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    metacritic= data['results']['metacritc']
-                    if metacritic == 'None':
-                        metacritic="(Score not avaiable)"
-                    ratings = []
-                    ratings_data = data['results'][indice - 1]['esrb_rating']
-                    if ratings_data == 'None':
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    else:
-                        for elem in ratings_data:
-                            ratings.append(elem['name'])
-                        string_ratings =' '.join(str(elem) for elem in ratings)
-                        print(string_ratings) 
-                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
-                else:
-                    data = r.json()
-                    nome = data['results'][indice]['name'] #nome videogame
-                    if 'None' in nome:
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    metacritic= data['results']['metacritc']
-                    if metacritic == 'None':
-                        metacritic="(Score not avaiable)"
-                    ratings = []
-                    ratings_data = data['results'][indice]['esrb_rating']
-                    if ratings_data == 'None':
-                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-                    else:
-                        for elem in ratings_data:
-                            ratings.append(elem['name'])
-                        string_ratings =' '.join(str(elem) for elem in ratings)
-                        print(string_ratings) 
-                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
-            else:
-                output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                for elem in ratings_data:
+                    print(elem)
+                    ratings.append(elem['name'])
+            string_ratings =' '.join(str(elem) for elem in ratings)
+            print(string_ratings) 
+        '''
+        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome,metacritic, ratings_data)
         dispatcher.utter_message(text=output)
         return []
+    
