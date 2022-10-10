@@ -20143,6 +20143,8 @@ nlu:
     - metacritc
     - metacritics
     - Game ratings
+    - Game reviews
+    - review
     - Show me the score of [Paladins](game)
     - Show me the ratings of [God of War](game) [II](number)
     - Can i get ratings of this game?
