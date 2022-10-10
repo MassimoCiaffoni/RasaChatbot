@@ -18,20 +18,39 @@ from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.knowledge_base.storage import InMemoryKnowledgeBase
 from rasa_sdk.knowledge_base.actions import ActionQueryKnowledgeBase
 from rasa_sdk.events import SlotSet
-#
-#
-# class ActionHelloWorld(Action):
-#
-#     def name(self) -> Text:
-#         return "action_hello_world"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#
-#         dispatcher.utter_message(text="Hello World!")
-#
-#         return []
+import re
+# as per recommendation from @freylis, compile once only
+CLEANR = re.compile('<.*?>') 
+
+def cleanhtml(raw_html):
+  cleantext = re.sub(CLEANR, '', raw_html)
+  return cleantext
+
+class MyFallback(Action):
+    
+    def name(self) -> Text:
+        return "action_my_fallback"
+
+    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        dispatcher.utter_message(response = "utter_fallback")
+        return []
+
+class ActionResetIndex(Action):
+
+    def name(self):
+        return "action_reset_index"
+
+    def run(self, dispatcher, tracker, domain):
+        return [SlotSet("index", 0)]
+
+class ResetSlot(Action):
+
+    def name(self):
+        return "action_reset_slots"
+
+    def run(self, dispatcher, tracker, domain):
+        return [AllSlotsReset()]
 class ActionSearchGame(Action):
     
     def name(self) -> Text:
@@ -64,12 +83,14 @@ class ActionSearchGame(Action):
                     else:
                         image = data['results'][indice]['background_image']
                         release_date = data['results'][indice]['released']
+                        '''
                         metacritic_score = data['results'][indice]['metacritic']
                         if data['results'][indice]['esrb_rating'] == None:
                             esb_rate= None
                         else:
                             #print(data['results'][indice]['esrb_rating'])
                             esb_rate = data['results'][indice]['esrb_rating']['name']
+                        '''
                         genres = data['results'][indice]['genres']
                         generi= []
                         string_genres=""
@@ -94,8 +115,9 @@ class ActionSearchGame(Action):
                             developers = "None"
                         print(publishers)
                         print(developers)
-                        output="{} it's an {} game and it was developed by {} and published by {} on {}. It has a metacritc score of {} and it has been classified with this tag: {} {}. \n \n Is this the game you wanted? ".format(nome,
-                            string_genres,developers, publishers, release_date, metacritic_score, esb_rate, image)
+                        description=cleanhtml(game_data['description'])
+                        output="{} it's an {} game and it was developed by {} and published by {} on {}. {} {}. \n \n Is this the game you wanted? ".format(nome,
+                            string_genres,developers, publishers, release_date,description,image)
             else:
                 output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
         else:
@@ -114,12 +136,14 @@ class ActionSearchGame(Action):
                     else:
                         image = data['results'][indice]['background_image']
                         release_date = data['results'][indice]['released']
+                        '''
                         metacritic_score = data['results'][indice]['metacritic']
                         if data['results'][indice]['esrb_rating'] == None:
                             esb_rate= None
                         else:
                             #print(data['results'][indice]['esrb_rating'])
                             esb_rate = data['results'][indice]['esrb_rating']['name']
+                        '''
                         genres = data['results'][indice]['genres']
                         generi = []
                         string_genres = ""
@@ -144,39 +168,14 @@ class ActionSearchGame(Action):
                             developers = "None"
                         print(publishers)
                         print(developers)
-                        output="{} it's an {} game and it was developed by {} and published by {} on {}. It has a metacritc score of {} and it has been classified with this tag: {} {}. \n \n Is this the game you wanted? ".format(nome,
-                            string_genres,developers, publishers, release_date, metacritic_score, esb_rate, image)
+                        description=cleanhtml(game_data['description'])
+                        output="{} it's an {} game and it was developed by {} and published by {} on {}. {} {}. \n \n Is this the game you wanted? ".format(nome,
+                            string_genres,developers, publishers, release_date,description,image)
             else:
                 output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"  
         dispatcher.utter_message(text=output)
         return[SlotSet("index", indice+1), SlotSet('game_id', id_game)]
 
-
-class MyFallback(Action):
-    
-    def name(self) -> Text:
-        return "action_my_fallback"
-
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        dispatcher.utter_message(response = "utter_fallback")
-        return []
-
-class ActionResetIndex(Action):
-
-    def name(self):
-        return "action_reset_index"
-
-    def run(self, dispatcher, tracker, domain):
-        return [SlotSet("index", 0), SlotSet('number',None)]
-
-class ResetSlot(Action):
-
-    def name(self):
-        return "action_reset_slots"
-
-    def run(self, dispatcher, tracker, domain):
-        return [AllSlotsReset()]
 
 class ActionSearchPublisher(Action):
     
@@ -204,7 +203,7 @@ class ActionSearchPublisher(Action):
             if r2.status_code == 200:
                 data2 = r2.json() 
                 print(data2)
-                description = data2['description']
+                description = cleanhtml(data2['description'])
             print(top_game)
             r3= requests.get(url='https://api.rawg.io/api/games/{}?key=bbac0252b5ed4a2b8286472063cb2dfe'.format(top_game))
             if r3.status_code == 200:
@@ -409,14 +408,14 @@ class ActionGetTrailer(Action):
             if r.status_code ==200:
                 data = r.json()
                 game_id=data['results'][indice]['id']
-            else: output = "I couldnt find any store which sells the game"
-        elif numero!='None':
+            else: output = "I couldnt find any trailer of the game"
+        elif numero!='None' and game_id==0:
                 print("dentro elif")
                 r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
                 if r.status_code ==200:
                     data = r.json()
                     game_id=data['results'][indice]['id']
-                else: output = "I couldnt find any store which sells the game"
+                else: output = "I couldnt find any trailer of the game"
         r = requests.get(url="https://api.rawg.io/api/games/{}/movies?key=bbac0252b5ed4a2b8286472063cb2dfe".format(game_id))
 
         if r.status_code ==200:
@@ -428,9 +427,112 @@ class ActionGetTrailer(Action):
                 print(elem['data']['max'])
                 trailer_urls.append(elem['data']['max'])            
             trailer_url='\n'.join(str(elem) for elem in trailer_urls)
-            output = "Here some trailers of this game: {} ".format(trailer_url)
+            if trailer_url=='':
+                output= "I couldnt find any trailer of the game"
+            else:
+                output = "Here some trailers of this game: {} ".format(trailer_url)
         else:
             output = "I couldnt find any trailer of the game"
         
+        dispatcher.utter_message(text=output)
+        return []
+
+
+class ActionMetacritic(Action):
+    
+    def name(self) -> Text:
+        return "action_metacritics"
+
+    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        name = tracker.get_slot('game')
+        indice = tracker.get_slot('index')
+        numero = tracker.get_slot('number')
+        print(name)
+        print(indice)
+        if numero=="None":
+            r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
+            
+
+            if r.status_code == 200:
+                if indice > 0:
+                    data = r.json()
+                    nome = data['results'][indice - 1]['name'] #nome videogame
+                    if 'None' in nome:
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    metacritic= data['results']['metacritc']
+                    if metacritic == 'None':
+                        metacritic="(Score not avaiable)"
+                    ratings = []
+                    ratings_data = data['results'][indice - 1]['esrb_rating']
+                    if ratings_data == 'None':
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    else:
+                        for elem in ratings_data:
+                            ratings.append(elem['name'])
+                        string_ratings =' '.join(str(elem) for elem in ratings)
+                        print(string_ratings) 
+                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
+                else:
+                    data = r.json()
+                    nome = data['results'][indice]['name'] #nome videogame
+                    if 'None' in nome:
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    metacritic= data['results']['metacritc']
+                    if metacritic == 'None':
+                        metacritic="(Score not avaiable)"
+                    ratings = []
+                    ratings_data = data['results'][indice]['esrb_rating']
+                    if ratings_data == 'None':
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    else:
+                        for elem in ratings_data:
+                            ratings.append(elem['name'])
+                        string_ratings =' '.join(str(elem) for elem in ratings)
+                        print(string_ratings) 
+                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
+            else:
+                output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+        else:   
+            r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+            
+            if r.status_code == 200:
+                if indice > 0:
+                    data = r.json()
+                    nome = data['results'][indice - 1]['name'] #nome videogame
+                    if 'None' in nome:
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    metacritic= data['results']['metacritc']
+                    if metacritic == 'None':
+                        metacritic="(Score not avaiable)"
+                    ratings = []
+                    ratings_data = data['results'][indice - 1]['esrb_rating']
+                    if ratings_data == 'None':
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    else:
+                        for elem in ratings_data:
+                            ratings.append(elem['name'])
+                        string_ratings =' '.join(str(elem) for elem in ratings)
+                        print(string_ratings) 
+                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
+                else:
+                    data = r.json()
+                    nome = data['results'][indice]['name'] #nome videogame
+                    if 'None' in nome:
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    metacritic= data['results']['metacritc']
+                    if metacritic == 'None':
+                        metacritic="(Score not avaiable)"
+                    ratings = []
+                    ratings_data = data['results'][indice]['esrb_rating']
+                    if ratings_data == 'None':
+                        output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
+                    else:
+                        for elem in ratings_data:
+                            ratings.append(elem['name'])
+                        string_ratings =' '.join(str(elem) for elem in ratings)
+                        print(string_ratings) 
+                        output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome, string_ratings)
+            else:
+                output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
         dispatcher.utter_message(text=output)
         return []

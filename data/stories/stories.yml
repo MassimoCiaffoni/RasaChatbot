@@ -146,8 +146,27 @@ stories:
   - intent: deny
   - action: action_reset_slots
   
-
 - story: search_game path 5
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+  - action: utter_init
+  - intent: affirm
+  - action: utter_games
+  - intent: search_game
+  - action: action_search_game
+  - intent: affirm
+  - action: action_reset_index
+  - action: utter_more_info
+  - intent: ratings
+  - action: action_metacritics
+  - action: utter_other_info
+  - intent: deny
+  - action: action_reset_slots
+
+- story: search_game path 6
   steps:
   - intent: greet
   - action: utter_greet
@@ -160,6 +179,7 @@ stories:
   - action: action_search_game
   - intent: deny
   - action: action_search_game
+
 
  
 
@@ -174,6 +194,7 @@ stories:
   - action: action_search_platforms
   - action: utter_other_info
   - intent: affirm
+  - action: utter_games
 
 - story: deactivate slot after correct game search 2
   steps: 
@@ -186,6 +207,7 @@ stories:
   - action: action_search_screenshots
   - action: utter_other_info
   - intent: affirm
+  - action: utter_games
 
 
 
@@ -200,6 +222,7 @@ stories:
   - action: action_search_store
   - action: utter_other_info
   - intent: affirm
+  - action: utter_games
 
 
 
@@ -214,6 +237,20 @@ stories:
   - action: action_get_trailer
   - action: utter_other_info
   - intent: affirm
+  - action: utter_games
+
+- story: deactivate slot after correct game search 5
+  steps: 
+  - intent: search_game
+  - action: action_search_game
+  - intent: affirm
+  - action: action_reset_index
+  - action: utter_more_info
+  - intent: ratings
+  - action: action_metacritics
+  - action: utter_other_info
+  - intent: affirm
+  - action: utter_games
 
 - story: search again 
   steps:

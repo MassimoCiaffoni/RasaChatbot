@@ -20137,6 +20137,16 @@ nlu:
     - Can i get a video of this game?
     - Can you see if there are some trailers of this game?
     - Trailer of [Yakuza](game) [3](number)
+- intent: ratings
+  examples: |
+    - Show me the ratings of this game
+    - metacritc
+    - metacritics
+    - Game ratings
+    - Show me the score of [Paladins](game)
+    - Show me the ratings of [God of War](game) [II](number)
+    - Can i get ratings of this game?
+    - Ratings of [Yakuza](game) [3](number)
 - intent: search_publisher
   examples: |
     - How many games [Activision](publisher) published?
