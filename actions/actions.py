@@ -50,6 +50,7 @@ class ResetSlot(Action):
         return "action_reset_slots"
 
     def run(self, dispatcher, tracker, domain):
+        print("Reset degli slot")
         return [AllSlotsReset()]
 class ActionSearchGame(Action):
     
@@ -174,7 +175,10 @@ class ActionSearchGame(Action):
             else:
                 output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"  
         dispatcher.utter_message(text=output)
-        return[SlotSet("index", indice+1), SlotSet('game_id', id_game)]
+        if numero is None:
+            return[SlotSet("index", indice+1), SlotSet('game_id', id_game), SlotSet("current_search", nome)]
+        else:
+            return[SlotSet("index", indice+1), SlotSet('game_id', id_game), SlotSet("current_search", nome+numero)]
 
 
 class ActionSearchPublisher(Action):
@@ -317,17 +321,38 @@ class ActionSearchScreenshots(Action):
             indice=indice -1
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
+        current=tracker.get_slot('current_search')
+        print(game_id)
         print(name)
         print(numero)
-        if name is not 'None' and numero=="None":
-            r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
-            if r.status_code ==200:
-                data = r.json()
-                game_id=data['results'][indice]['id']
-            else: 
-                output = "I couldnt find any screenshots"
-                dispatcher.utter_message(text=output)
-        elif name is not 'None' and numero is not 'None':
+        print(current)
+        if game_id==0:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
+                if r.status_code ==200:
+                    data = r.json()
+                    game_id=data['results'][indice]['id']
+                else: 
+                    output = "I couldnt find any screenshots"
+                    dispatcher.utter_message(text=output)
+            elif numero is not None and name+numero!=current:
+                r2=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                if r2.status_code ==200:
+                    data2 = r2.json()
+                    game_id=data2['results'][indice]['id']
+                else: 
+                    output = "I couldnt find any screenshots"
+                    dispatcher.utter_message(text=output)
+        else:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
+                if r.status_code ==200:
+                    data = r.json()
+                    game_id=data['results'][indice]['id']
+                else: 
+                    output = "I couldnt find any screenshots"
+                    dispatcher.utter_message(text=output)
+            elif numero is not None and name+numero!=current:
                 r2=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
                 if r2.status_code ==200:
                     data2 = r2.json()
@@ -349,9 +374,13 @@ class ActionSearchScreenshots(Action):
             for elem in image:
                 dispatcher.utter_message(image=elem)
         else:
+            print('here')
             output = "I couldnt find any screenshots"        
             dispatcher.utter_message(text=output)
-        return []
+        if numero is None:
+            return [SlotSet("current_search", name), SlotSet('game_id', game_id)]
+        else:
+            return [SlotSet("current_search", name+numero), SlotSet('game_id', game_id)]
 
 
 class ActionSearchStoreLink(Action):
@@ -366,19 +395,34 @@ class ActionSearchStoreLink(Action):
             indice=indice -1
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
+        current=tracker.get_slot('current_search')
         print(name)
-        if name is not 'None' and numero=="None":
-            r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
-            if r.status_code ==200:
-                data = r.json()
-                game_id=data['results'][indice]['id']
-            else: output = "I couldnt find any store which sells the game"
-        elif numero!='None':
-                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+        if game_id==0:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
                 if r.status_code ==200:
                     data = r.json()
                     game_id=data['results'][indice]['id']
                 else: output = "I couldnt find any store which sells the game"
+            elif numero is not None and name+numero!=current:
+                    r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                    if r.status_code ==200:
+                        data = r.json()
+                        game_id=data['results'][indice]['id']
+                    else: output = "I couldnt find any store which sells the game"
+        else:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
+                if r.status_code ==200:
+                    data = r.json()
+                    game_id=data['results'][indice]['id']
+                else: output = "I couldnt find any store which sells the game"
+            elif numero is not None and name+numero!=current:
+                    r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                    if r.status_code ==200:
+                        data = r.json()
+                        game_id=data['results'][indice]['id']
+                    else: output = "I couldnt find any store which sells the game"
         r = requests.get(url="https://api.rawg.io/api/games/{}/stores?key=bbac0252b5ed4a2b8286472063cb2dfe".format(game_id))
 
         if r.status_code ==200:
@@ -394,7 +438,10 @@ class ActionSearchStoreLink(Action):
             output = "I couldnt find any store which sells the game"
         
         dispatcher.utter_message(text=output)
-        return []
+        if numero is None:
+            return [SlotSet("current_search", name), SlotSet('game_id', game_id)]
+        else:
+            return [SlotSet("current_search", name+numero), SlotSet('game_id', game_id)]
 
 
 class ActionGetTrailer(Action):
@@ -409,22 +456,38 @@ class ActionGetTrailer(Action):
             indice=indice -1
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
+        current=tracker.get_slot('current_search')
         print(name)
         print(numero)
         print(game_id)
-        if name is not 'None' and numero=="None":
-            r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
-            if r.status_code ==200:
-                data = r.json()
-                game_id=data['results'][indice]['id']
-            else: output = "I couldnt find any trailer of the game"
-        elif numero!='None':
-                print("dentro elif")
-                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+        if game_id==0:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
                 if r.status_code ==200:
                     data = r.json()
                     game_id=data['results'][indice]['id']
                 else: output = "I couldnt find any trailer of the game"
+            elif numero is not None and name+numero!=current:
+                    print("dentro elif")
+                    r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                    if r.status_code ==200:
+                        data = r.json()
+                        game_id=data['results'][indice]['id']
+                    else: output = "I couldnt find any trailer of the game"
+        else:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
+                if r.status_code ==200:
+                    data = r.json()
+                    game_id=data['results'][indice]['id']
+                else: output = "I couldnt find any trailer of the game"
+            elif numero is not None and name+numero!=current:
+                    print("dentro elif")
+                    r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                    if r.status_code ==200:
+                        data = r.json()
+                        game_id=data['results'][indice]['id']
+                    else: output = "I couldnt find any trailer of the game"
         r = requests.get(url="https://api.rawg.io/api/games/{}/movies?key=bbac0252b5ed4a2b8286472063cb2dfe".format(game_id))
 
         if r.status_code ==200:
@@ -444,7 +507,10 @@ class ActionGetTrailer(Action):
             output = "I couldnt find any trailer of the game"
         
         dispatcher.utter_message(text=output)
-        return []
+        if numero is None:
+            return [SlotSet("current_search", name), SlotSet('game_id', game_id)]
+        else:
+            return [SlotSet("current_search", name+numero), SlotSet('game_id', game_id)]
 
 
 class ActionMetacritic(Action):
@@ -458,32 +524,54 @@ class ActionMetacritic(Action):
             indice=indice -1
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
+        current=tracker.get_slot('current_search')
         print(name)
         print(numero)
         print(game_id)
-        if name is not 'None' and numero=="None":
-            r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
-            if r.status_code ==200:
-                data = r.json()
-                game_id=data['results'][indice]['id']
-            else: output = "I couldnt find any info of the game"
-        elif numero!='None':
-                print("dentro elif")
-                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+        if game_id==0:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
                 if r.status_code ==200:
                     data = r.json()
                     game_id=data['results'][indice]['id']
                 else: output = "I couldnt find any info of the game"
+            elif numero is not None and name+numero!=current:
+                    print("dentro elif")
+                    r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                    if r.status_code ==200:
+                        data = r.json()
+                        game_id=data['results'][indice]['id']
+                    else: output = "I couldnt find any info of the game"
+        else:
+            if name!=current and numero is None:
+                r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
+                if r.status_code ==200:
+                    data = r.json()
+                    game_id=data['results'][indice]['id']
+                else: output = "I couldnt find any info of the game"
+            elif numero is not None and name+numero!=current:
+                    print("dentro elif")
+                    r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
+                    if r.status_code ==200:
+                        data = r.json()
+                        game_id=data['results'][indice]['id']
+                    else: output = "I couldnt find any info of the game"
         r = requests.get(url="https://api.rawg.io/api/games/{}?key=bbac0252b5ed4a2b8286472063cb2dfe".format(game_id))
         data = r.json()
         nome=data['name']
         metacritic= data['metacritic']
         if metacritic is 'None':
-            metacritic="(Score not avaiable)"
+            metacritic="Not avaiable"
         ratings = []
-        ratings_data = data['esrb_rating']['name']
+        if data['esrb_rating'] is None:
+            ratings_data='Not Avaiable'
+        else:
+            ratings_data = data['esrb_rating']['name']
         print(ratings_data)
         output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome,metacritic, ratings_data)
         dispatcher.utter_message(text=output)
-        return []
+        if numero is None:
+            return [SlotSet("current_search", name), SlotSet('game_id', game_id)]
+        else:
+            return [SlotSet("current_search", name+numero), SlotSet('game_id', game_id)]
     

@@ -84,6 +84,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
+  - action: utter_init
 
 - story: search_game path 2
   steps:
@@ -104,6 +105,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
+  - action: utter_init
 
 - story: search_game path 3
   steps:
@@ -124,6 +126,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
+  - action: utter_init
 
 
 - story: search_game path 4
@@ -145,6 +148,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
+  - action: utter_init
   
 - story: search_game path 5
   steps:
@@ -165,6 +169,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
+  - action: utter_init
 
 - story: search_game path 6
   steps:
@@ -179,6 +184,7 @@ stories:
   - action: action_search_game
   - intent: deny
   - action: action_search_game
+
 
 - story: search_game path 7
   steps:
@@ -196,6 +202,7 @@ stories:
   - action: utter_more_info
   - intent: deny
   - action: action_reset_slots
+  - action: utter_init
  
 
 - story: deactivate slot after correct game search 1

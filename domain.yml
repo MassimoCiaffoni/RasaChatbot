@@ -124,6 +124,11 @@ responses:
   - text: I'm glad that I help you. I can show you other info (type help to see how can i help you) 
   utter_other_info:
   - text: Do you need other info about this game?
+    buttons:
+    - title: "Yes"
+      payload: "/affirm"
+    - title: "No"
+      payload: "/deny"
   
 actions:
 - action_my_fallback
