@@ -78,7 +78,9 @@ slots:
     - type: custom
 responses:
   utter_start:
-  - text: Welcome visitor, I am GameInfoBot, I'll give you all the information you need about the videogames world. For more help you can type "/help" to see all the things you can ask me.
+  - text: Welcome visitor, I am GameInfoBot, I'll give you all the information you need 
+          about the videogames world. For more help you can type "/help" to see all the 
+          things you can ask me.
   utter_stop:
   - text: Goodbye, friend!
   utter_greet:

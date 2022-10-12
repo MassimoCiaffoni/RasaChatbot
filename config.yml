@@ -19,7 +19,7 @@ pipeline:
     constrain_similarities: true
   - name: RegexEntityExtractor
     case_sensitive: True
-    use_lookup_tables: True
+    use_lookup_tables: False
     use_regexes: True
     use_word_boundaries: True
   - name: LexicalSyntacticFeaturizer
@@ -45,7 +45,7 @@ policies:
   - name: RulePolicy
     core_fallback_threshold: 0.4
     core_fallback_action_name: "action_my_fallback"
-    enable_fallback_prediction: True
+    enable_fallback_prediction: False
   - name: UnexpecTEDIntentPolicy
     max_history: 10
     epochs: 200

@@ -475,7 +475,7 @@ class ActionMetacritic(Action):
         data = r.json()
         nome=data['name']
         metacritic= data['metacritic']
-        if metacritic == 'None':
+        if metacritic is 'None':
             metacritic="(Score not avaiable)"
         ratings = []
         ratings_data = data['esrb_rating']['name']
