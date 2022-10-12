@@ -98,7 +98,7 @@ class ActionSearchGame(Action):
                             generi.append(elem['name'])
                             print(generi)
                         for elem in generi:
-                            string_genres=string_genres+elem+", "
+                            string_genres=string_genres+elem+""
                         id_game = data['results'][indice]['id']
                         r2= requests.get(url='https://api.rawg.io/api/games/{}?key=bbac0252b5ed4a2b8286472063cb2dfe'.format(id_game))
                         game_data = r2.json()
@@ -150,7 +150,7 @@ class ActionSearchGame(Action):
                         for elem in genres:
                             generi.append(elem['name'])
                         for elem in generi:
-                            string_genres=string_genres+elem+", "
+                            string_genres=string_genres+elem+""
                         id_game = data['results'][indice]['id']
                         print(id_game)
                         r2= requests.get(url='https://api.rawg.io/api/games/{}?key=bbac0252b5ed4a2b8286472063cb2dfe'.format(id_game))
