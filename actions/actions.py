@@ -319,18 +319,22 @@ class ActionSearchScreenshots(Action):
         numero=tracker.get_slot('number')
         print(name)
         print(numero)
-        if name is not 'None' and numero=="None" and game_id==0:
+        if name is not 'None' and numero=="None":
             r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
             if r.status_code ==200:
                 data = r.json()
                 game_id=data['results'][indice]['id']
-            else: output = "I couldnt find any screenshots"
-        elif name is not 'None' and numero is not 'None' and game_id==0:
+            else: 
+                output = "I couldnt find any screenshots"
+                dispatcher.utter_message(text=output)
+        elif name is not 'None' and numero is not 'None':
                 r2=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
                 if r2.status_code ==200:
                     data2 = r2.json()
                     game_id=data2['results'][indice]['id']
-                else: output = "I couldnt find any screenshots"
+                else: 
+                    output = "I couldnt find any screenshots"
+                    dispatcher.utter_message(text=output)
         r3 = requests.get(url="https://api.rawg.io/api/games/{}/screenshots?key=bbac0252b5ed4a2b8286472063cb2dfe".format(game_id))
 
         if r3.status_code ==200:
@@ -342,12 +346,11 @@ class ActionSearchScreenshots(Action):
                 if elem['is_deleted'] == False:
                     image.append(elem['image'])
             print(image)
-            string_image='\n'.join(str(elem) for elem in image)
-            output = "Here some screenshots: {}".format(string_image)
+            for elem in image:
+                dispatcher.utter_message(image=elem)
         else:
-            output = "I couldnt find any screenshots"
-        
-        dispatcher.utter_message(text=output)
+            output = "I couldnt find any screenshots"        
+            dispatcher.utter_message(text=output)
         return []
 
 
@@ -364,7 +367,7 @@ class ActionSearchStoreLink(Action):
         game_id=tracker.get_slot('game_id')
         numero=tracker.get_slot('number')
         print(name)
-        if name is not 'None' and numero=="None" and game_id==0:
+        if name is not 'None' and numero=="None":
             r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
             if r.status_code ==200:
                 data = r.json()
@@ -409,13 +412,13 @@ class ActionGetTrailer(Action):
         print(name)
         print(numero)
         print(game_id)
-        if name is not 'None' and numero=="None" and game_id==0:
+        if name is not 'None' and numero=="None":
             r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
             if r.status_code ==200:
                 data = r.json()
                 game_id=data['results'][indice]['id']
             else: output = "I couldnt find any trailer of the game"
-        elif numero!='None' and game_id==0:
+        elif numero!='None':
                 print("dentro elif")
                 r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
                 if r.status_code ==200:
@@ -458,13 +461,13 @@ class ActionMetacritic(Action):
         print(name)
         print(numero)
         print(game_id)
-        if name is not 'None' and numero=="None" and game_id==0:
+        if name is not 'None' and numero=="None":
             r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}&search_precise=true'.format(name))
             if r.status_code ==200:
                 data = r.json()
                 game_id=data['results'][indice]['id']
             else: output = "I couldnt find any info of the game"
-        elif numero!='None' and game_id==0:
+        elif numero!='None':
                 print("dentro elif")
                 r=requests.get(url='https://api.rawg.io/api/games?key=bbac0252b5ed4a2b8286472063cb2dfe&search={}%20{}&search_precise=true'.format(name, numero))
                 if r.status_code ==200:

@@ -3,7 +3,7 @@ config:
   store_entities_as_slots: true
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  carry_over_slots_to_new_session: false
 intents:
 - affirm:
     use_entities: true
@@ -74,6 +74,11 @@ slots:
   game_id:
     type: float
     initial_value: 0
+    mappings:
+    - type: custom
+  current_search:
+    type: text
+    initial_value: None
     mappings:
     - type: custom
 responses:
