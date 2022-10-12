@@ -480,19 +480,6 @@ class ActionMetacritic(Action):
         ratings = []
         ratings_data = data['esrb_rating']['name']
         print(ratings_data)
-        '''
-        if ratings_data == 'None':
-            output="I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"
-        else:
-            if len(ratings_data)==1:
-                ratings.append(ratings_data['name'])
-            else:
-                for elem in ratings_data:
-                    print(elem)
-                    ratings.append(elem['name'])
-            string_ratings =' '.join(str(elem) for elem in ratings)
-            print(string_ratings) 
-        '''
         output="{} has a metacritics score of {} and has been tagged with: {} ".format(nome,metacritic, ratings_data)
         dispatcher.utter_message(text=output)
         return []
