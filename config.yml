@@ -19,7 +19,7 @@ pipeline:
     constrain_similarities: true
   - name: RegexEntityExtractor
     case_sensitive: True
-    use_lookup_tables: False
+    use_lookup_tables: True
     use_regexes: True
     use_word_boundaries: True
   - name: LexicalSyntacticFeaturizer

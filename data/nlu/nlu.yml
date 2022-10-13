@@ -18,7 +18,6 @@ nlu:
     - Hi
 - intent: goodbye
   examples: |
-    - cu
     - good by
     - cee you later
     - good night
@@ -224,19 +223,19 @@ nlu:
 - intent: search_game
   examples: |
     - What can you tell me about [Borderlands](game)?
-    - I need information about [God of War](game) [III](number)
+    - I need information about [God of War III](game) 
     - give me information about [Super Mario 64 DS](game)
     - what do you know about [Portal](game)?
     - Tell me about [Dark Souls](game)
     - [Crash Bash](game)
     - [Final Fantasy](game) [3](number)
-    - What can you say about [Yakuza Kiwami](game) [2](number)?
+    - What can you say about [Yakuza Kiwami 2](game)?
     - Say me about [Borderlands](game) [3](number)
-    - What can you tell me about [Final Fantasy](game) [VII](number)?
-    - Tell me about [Borderlands](game) [2](number)
+    - What can you tell me about [Final Fantasy VII](game)?
+    - Tell me about [Borderlands 2](game) 
     - Tell me about sajdjsd
     - tell me about gncls
-    - Tell me about [Yakuza](game) [0](number)
+    - Tell me about [Yakuza 0](game) 
     - Tell me about ggss
     - Tell me about [Yakuza 3 Remastered](game)
     - Tell me about [Final Fantasy VII Remake](game)
@@ -20064,37 +20063,6 @@ nlu:
     - Comanche
     - Resident Evil Survivor
     - Builder Simulator
-- lookup: number/remastered
-  examples: |
-    - 1
-    - 2
-    - 3
-    - 4
-    - 5
-    - 6
-    - 7
-    - 8
-    - 9
-    - 0
-    - II
-    - III
-    - IV
-    - V
-    - VI
-    - VII
-    - VIII
-    - IX
-    - X
-    - XI
-    - XII
-    - XIII
-    - XIV
-    - XV
-    - XVI
-    - XVII
-    - XVIII
-    - XIX
-    - XX
 - intent: platforms
   examples: |
     - Show me on which platforms the game it's available
@@ -20102,7 +20070,7 @@ nlu:
     - Platforms
     - What are the platforms of [God of War](game)?
     - On which platforms [Crash Bandicoot](game) was released?
-    - On which platforms [Crash Bandicoot](game) [3](number) was released?
+    - On which platforms [Crash Bandicoot 3](game)  was released?
 - intent: screenshots
   examples: |
     - Show me some screenshots
@@ -20110,22 +20078,22 @@ nlu:
     - Screens
     - Screenshots
     - I'd like to see some screenshots of [God of War](game)
-    - I'd like to see some screenshots of [The Witcher](game) [3](number)
+    - I'd like to see some screenshots of [The Witcher 3](game)
     - I'd like to see some screenshots of this game
-    - Show me some screens of [Yakuza](game) [5](number)
+    - Show me some screens of [Yakuza 5](game) 
     - Game screenshots
 - intent: store
   examples: |
     - Where can i buy this game?
     - Show me where the game is sell
     - On witch stores [Paladins](game) is sell?
-    - On witch stores [Overwatch](game) [2](number) is sell?
+    - On witch stores [Overwatch 2](game) is sell?
     - Stores
     - Game store
     - Show me where i can buy [Yakuza](game) 
-    - Show me where i can buy [Resident Evil](game) [7](number) 
+    - Show me where i can buy [Resident Evil 7](game) 
     - Where can i buy [Tomb Raider](game)?
-    - Where can i buy [Final Fantasy](game) [7](number)?
+    - Where can i buy [Final Fantasy VII](game)?
 - intent: trailer
   examples: |
     - Show me the trailer of this game
@@ -20133,10 +20101,10 @@ nlu:
     - trailer
     - Game Trailer
     - Show me the trailer of [Paladins](game)
-    - Show me the trailer of [God of War](game) [II](number)
+    - Show me the trailer of [God of War III](game) 
     - Can i get a video of this game?
     - Can you see if there are some trailers of this game?
-    - Trailer of [Yakuza](game) [3](number)
+    - Trailer of [Yakuza 3](game) 
 - intent: ratings
   examples: |
     - Show me the ratings of this game
@@ -20146,9 +20114,9 @@ nlu:
     - Game reviews
     - review
     - Show me the score of [Paladins](game)
-    - Show me the ratings of [God of War](game) [II](number)
+    - Show me the ratings of [God of War II](game) 
     - Can i get ratings of this game?
-    - Ratings of [Yakuza](game) [3](number)
+    - Ratings of [Yakuza 3](game)
 - intent: search_publisher
   examples: |
     - How many games [Activision](publisher) published?

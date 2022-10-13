@@ -45,7 +45,6 @@ intents:
     use_entities: true
 entities:
 - game
-- number
 - publisher
 slots:
   game:
@@ -54,12 +53,6 @@ slots:
     mappings:
     - type: from_entity
       entity: game
-  number:
-    type: text
-    initial_value: None
-    mappings:
-    - type: from_entity
-      entity: number
   publisher:
     type: text
     initial_value: None
@@ -121,7 +114,7 @@ responses:
   utter_fallback:
   - text: Sorry! I couldn't get you!
   utter_more_info:
-  - text: I'm glad that I help you. I can show you other info (type help to see how can i help you) 
+  - text: I'm glad that I help you. I can show you other info (type help to see how can i help you).
   utter_other_info:
   - text: Do you need other info about this game?
     buttons:
@@ -129,7 +122,8 @@ responses:
       payload: "/affirm"
     - title: "No"
       payload: "/deny"
-  
+  utter_tell_me_more:
+  - text: What do you wanna know about this game?
 actions:
 - action_my_fallback
 - action_reset_slots
@@ -150,3 +144,4 @@ actions:
 - utter_happy
 - utter_iamabot
 - utter_init
+- utter_tell_me_more

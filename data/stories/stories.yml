@@ -84,7 +84,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
-  - action: utter_init
+  - action: utter_start
 
 - story: search_game path 2
   steps:
@@ -105,7 +105,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
-  - action: utter_init
+  - action: utter_start
 
 - story: search_game path 3
   steps:
@@ -126,7 +126,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
-  - action: utter_init
+  - action: utter_start
 
 
 - story: search_game path 4
@@ -148,7 +148,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
-  - action: utter_init
+  - action: utter_start
   
 - story: search_game path 5
   steps:
@@ -169,7 +169,7 @@ stories:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
-  - action: utter_init
+  - action: utter_start
 
 - story: search_game path 6
   steps:
@@ -202,7 +202,7 @@ stories:
   - action: utter_more_info
   - intent: deny
   - action: action_reset_slots
-  - action: utter_init
+  - action: utter_start
  
 
 - story: deactivate slot after correct game search 1
@@ -216,6 +216,7 @@ stories:
   - action: action_search_platforms
   - action: utter_other_info
   - intent: affirm
+  - action: utter_tell_me_more
 
 - story: deactivate slot after correct game search 2
   steps: 
@@ -228,6 +229,7 @@ stories:
   - action: action_search_screenshots
   - action: utter_other_info
   - intent: affirm
+  - action: utter_tell_me_more
 
 
 
@@ -242,7 +244,7 @@ stories:
   - action: action_search_store
   - action: utter_other_info
   - intent: affirm
-
+  - action: utter_tell_me_more
 
 
 
@@ -257,7 +259,7 @@ stories:
   - action: action_get_trailer
   - action: utter_other_info
   - intent: affirm
-
+  - action: utter_tell_me_more
 
 - story: deactivate slot after correct game search 5
   steps: 
@@ -270,6 +272,7 @@ stories:
   - action: action_metacritics
   - action: utter_other_info
   - intent: affirm
+  - action: utter_tell_me_more
 
 
 - story: search again 
