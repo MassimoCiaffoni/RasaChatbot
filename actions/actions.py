@@ -108,7 +108,7 @@ class ActionSearchGame(Action):
                         print(publishers)
                         print(developers)
                         description=cleanhtml(game_data['description'])
-                        output="{} it's an {} game and it was developed by {} and published by {} on {}. {} {}. \n \n Is this the game you wanted? ".format(nome,
+                        output="{} it's an {}game and it was developed by {} and published by {} on {}. {} {}. \n \n Is this the game you wanted? ".format(nome,
                             string_genres,developers, publishers, release_date,description,image)
         else:
                 output = "I do not know anything about , what a mistery!? Are you sure it is correctly spelled?"      
