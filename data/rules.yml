@@ -22,59 +22,59 @@ rules:
   - intent: bot_challenge
   - action: utter_iamabot
 
-- rule: Custom
+- rule: Show other info after store search
   steps:
   - intent: store
   - action: action_search_store
   - action: utter_other_info
 
-- rule: Custom 2
+- rule: Show other info after platform search
   steps:
   - intent: platforms
   - action: action_search_platforms
   - action: utter_other_info
 
-- rule: Custom 3
+- rule: Show other info after screenshot search
   steps:
   - intent: screenshots
   - action: action_search_screenshots
   - action: utter_other_info
 
 
-- rule: Custom 4
+- rule: Show other info after trailer search
   steps:
   - intent: trailer
   - action: action_get_trailer
   - action: utter_other_info
 
 
-- rule: Custom 5
+- rule: Show other info after metacritics search
   steps:
   - intent: ratings
   - action: action_metacritics
   - action: utter_other_info
 
-- rule: Custom 6
+- rule: Reset Slots after deny other info
   steps:
   - action: utter_other_info
   - intent: deny
   - action: action_reset_slots
   - action: utter_start
 
-- rule: Custom 7
+- rule: Show tell me more affter affirm other info
   steps:
   - action: utter_other_info
   - intent: affirm
   - action: utter_tell_me_more
 
-- rule: Custom 8
+- rule: Reset index after corret game search
   steps:
   - action: action_search_game
   - intent: affirm
   - action: action_reset_index
   - action: utter_more_info
 
-- rule: Custom 9 
+- rule: Search game again 
   steps:
   - action: action_search_game
   - intent: deny

@@ -123,7 +123,7 @@ responses:
     - title: "No"
       payload: "/deny"
   utter_tell_me_more:
-  - text: What do you wanna know about this game?
+  - text: What do you wanna know about {game}?
 actions:
 - action_my_fallback
 - action_reset_slots

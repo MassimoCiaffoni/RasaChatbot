@@ -13,7 +13,7 @@ stories:
   - action: utter_goodbye
 
 
-- story: sad path 1
+- story: happy path 
   steps:
   - intent: greet
   - action: utter_greet
@@ -43,17 +43,7 @@ stories:
   - intent: deny
   - action: utter_goodbye
 
-- story: sad path 4
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_bored
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: fallback_info path3
+- story: fallback_info path
   steps: 
   - intent: greet
   - action: utter_greet
@@ -171,7 +161,7 @@ stories:
   - action: action_reset_slots
   - action: utter_start
 
-- story: search_game path 6
+- story: search_game again
   steps:
   - intent: greet
   - action: utter_greet
@@ -186,7 +176,7 @@ stories:
   - action: action_search_game
 
 
-- story: search_game path 7
+- story: search_game path no other info
   steps:
   - intent: greet
   - action: utter_greet
@@ -205,7 +195,7 @@ stories:
   - action: utter_start
  
 
-- story: deactivate slot after correct game search 1
+- story: search_game path with more info 1
   steps: 
   - intent: search_game
   - action: action_search_game
@@ -218,7 +208,7 @@ stories:
   - intent: affirm
   - action: utter_tell_me_more
 
-- story: deactivate slot after correct game search 2
+- story: search_game path with more info 2
   steps: 
   - intent: search_game
   - action: action_search_game
@@ -233,7 +223,7 @@ stories:
 
 
 
-- story: deactivate slot after correct game search 3
+- story: search_game path with more info 3
   steps: 
   - intent: search_game
   - action: action_search_game
@@ -248,7 +238,7 @@ stories:
 
 
 
-- story: deactivate slot after correct game search 4
+- story: search_game path with more info 4
   steps: 
   - intent: search_game
   - action: action_search_game
@@ -261,7 +251,7 @@ stories:
   - intent: affirm
   - action: utter_tell_me_more
 
-- story: deactivate slot after correct game search 5
+- story: search_game path with more info 5
   steps: 
   - intent: search_game
   - action: action_search_game
